@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.website.mapper.ArticleMapper">
+
+    <insert id="add" parameterType="cn.website.po.Article">
+        insert into article values(null,#{title},#{content},#{releaseTime},#{cid})
+    </insert>
+
+    <update id="update" parameterType="cn.website.po.Article">
+        update article set title=#{title}, content=#{content}, releaseTime=#{releaseTime} where id=#{id}
+    </update>
+
+    <delete id="remove" parameterType="int">
+        delete from article where id = #{value}
+    </delete>
+
+    <insert id="addSlide">
+        insert into slides values(#{arg0},#{arg1})
+    </insert>
+
+    <select id="isExist" parameterType="int" resultType="boolean">
+        select count(*) != 0 from slides where id = #{value}
+    </select>
+
+    <update id="setSlide">
+        update slides set aid=#{arg1} where id = #{arg0}
+    </update>
+    
+    <delete id="removeSlide" parameterType="int">
+        delete from slides where id = #{value}
+    </delete>
+    
+    <resultMap id="SlideMap" type="cn.website.po.Slide">
+        <id column="id" property="id"/>
+
+        <association property="article" javaType="cn.website.po.Article">
+            <id column="aid" property="id"/>
+            <result column="title" property="title"/>
+            <result column="content" property="content"/>
+            <result column="releaseTime" property="releaseTime"/>
+        </association>
+    </resultMap>
+    
+    <select id="getSlides" resultMap="SlideMap">
+        select slides.id id,article.id aid,article.title title,article.content content,article.releaseTime releaseTime
+        from slides inner join article on slides.aid = article.id order by slides.id
+    </select>
+
+    <select id="getNews" parameterType="int" resultType="cn.website.po.Article">
+        select * from article where id = #{value}
+    </select>
+
+    <select id="getDisplay" resultType="cn.website.po.Article">
+        select * from article,category where cid = #{arg0} and category.id = article.cid order by releaseTime desc limit #{arg1}
+    </select>
+
+    <select id="getAll" resultType="cn.website.po.Article">
+        select * from article,category  where cid = #{value} and category.id = article.cid order by releaseTime desc
+    </select>
+
+    <select id="search" resultType="cn.website.po.Article">
+        select * from article where cid=#{arg1} and title like '%${arg0}%' order by releaseTime desc
+    </select>
+
+    <insert id="setBrief" parameterType="String">
+        insert into brief values(#{value})
+    </insert>
+
+    <delete id="deleteBrief">
+        delete from brief where 1 = 1
+    </delete>
+
+    <select id="getBrief" resultType="String">
+        select * from brief
+    </select>
+
+</mapper>

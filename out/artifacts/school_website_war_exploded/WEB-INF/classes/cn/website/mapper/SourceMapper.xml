@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.website.mapper.SourceMapper">
+
+    <insert id="addVideo" parameterType="cn.website.po.Video">
+        insert into video values(null,#{title},#{video},#{releaseTime})
+    </insert>
+
+    <insert id="addDownload" parameterType="cn.website.po.Download">
+        insert into download values(null,#{title},#{file},#{releaseTime})
+    </insert>
+
+    <update id="alterVideo" parameterType="cn.website.po.Video">
+        update video set title=#{title},video=#{video},releaseTime=#{releaseTime} where id=#{id}
+    </update>
+
+    <update id="alterDownload" parameterType="cn.website.po.Download">
+        update download set title=#{title},file=#{file},releaseTime=#{releaseTime} where id=#{id}
+    </update>
+
+    <delete id="deleteVideo" parameterType="int">
+        delete from video where id=#{value}
+    </delete>
+
+    <delete id="deleteDownload" parameterType="int">
+        delete from download where id=#{value}
+    </delete>
+
+    <select id="getVideoInLimit" parameterType="int" resultType="cn.website.po.Video">
+        select * from video order by releaseTime desc limit #{value}
+    </select>
+
+    <select id="getDownloadInLimit" parameterType="int" resultType="cn.website.po.Download">
+        select * from download order by releaseTime desc limit #{value}
+    </select>
+
+    <select id="getAllVideo" resultType="cn.website.po.Video">
+        select * from video order by releaseTime desc
+    </select>
+
+    <select id="getVideo" parameterType="int" resultType="cn.website.po.Video">
+        select * from video where id=#{value}
+    </select>
+
+    <select id="getAllDownload" resultType="cn.website.po.Download">
+        select * from download order by releaseTime desc
+    </select>
+
+    <select id="getDownload" parameterType="int" resultType="cn.website.po.Download">
+        select * from download where id = #{value}
+    </select>
+
+    <select id="searchVideo" parameterType="String" resultType="cn.website.po.Video">
+        select * from video where title like '%${value}%' order by releaseTime desc
+    </select>
+
+    <select id="searchDownload" parameterType="String" resultType="cn.website.po.Download">
+        select * from download where title like '%${value}%' order by releaseTime desc
+    </select>
+
+</mapper>
