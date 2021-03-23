@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.network_engineering.mapper.NewsMapper">
+
+    <insert id="add" parameterType="cn.network_engineering.po.Article">
+        insert into news values(null,#{title},#{content},#{releaseTime})
+    </insert>
+
+    <update id="update" parameterType="cn.network_engineering.po.Article">
+        update news set title=#{title}, content=#{content}, releaseTime=#{releaseTime} where id=#{id}
+    </update>
+
+    <delete id="remove" parameterType="int">
+        delete from news where id = #{value}
+    </delete>
+
+    <insert id="addSlide">
+        insert into slides values(#{arg0},#{arg1})
+    </insert>
+
+    <select id="isExist" parameterType="int" resultType="boolean">
+        select count(*) != 0 from slides where id = #{value}
+    </select>
+
+    <update id="setSlide">
+        update slides set aid=#{arg1} where id = #{arg0}
+    </update>
+    
+    <delete id="removeSlide" parameterType="int">
+        delete from slides where id = #{value}
+    </delete>
+    
+    <resultMap id="SlideMap" type="cn.network_engineering.po.Slide">
+        <id column="id" property="id"/>
+
+        <association property="article" javaType="cn.network_engineering.po.Article">
+            <id column="aid" property="id"/>
+            <result column="title" property="title"/>
+            <result column="content" property="content"/>
+            <result column="releaseTime" property="releaseTime"/>
+        </association>
+    </resultMap>
+    
+    <select id="getSlides" resultMap="SlideMap">
+        select slides.id id,news.id aid,news.title title,news.content content,news.releaseTime releaseTime
+        from slides inner join news on slides.aid = news.id order by slides.id
+    </select>
+
+    <select id="getNews" parameterType="int" resultType="cn.network_engineering.po.Article">
+        select * from news where id = #{value}
+    </select>
+
+    <select id="getDisplay" parameterType="int" resultType="cn.network_engineering.po.Article">
+        select * from news order by releaseTime desc limit #{value}
+    </select>
+
+    <select id="getAll" resultType="cn.network_engineering.po.Article">
+        select * from news order by releaseTime desc
+    </select>
+
+    <select id="search" parameterType="String" resultType="cn.network_engineering.po.Article">
+        select * from news where title like '%${value}%' order by releaseTime desc
+    </select>
+
+</mapper>

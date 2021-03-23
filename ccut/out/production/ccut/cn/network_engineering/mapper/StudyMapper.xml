@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.network_engineering.mapper.StudyMapper">
+
+    <insert id="add" parameterType="cn.network_engineering.po.Article" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into study values(null,#{title},#{content},#{releaseTime})
+    </insert>
+
+    <update id="update" parameterType="cn.network_engineering.po.Article">
+        update study set title=#{title}, content=#{content}, releaseTime=#{releaseTime} where id=#{id}
+    </update>
+
+    <delete id="remove" parameterType="int">
+        delete from study where id = #{value}
+    </delete>
+
+    <select id="getAttachment" parameterType="int" resultType="String">
+        select attachment from attachments where aid = #{id}
+    </select>
+
+    <insert id="addAttachment">
+        insert into attachments values(#{arg0},#{arg1})
+    </insert>
+
+    <delete id="deleteAttachment">
+        delete from attachments where aid = #{arg0} and attachment = #{arg1}
+    </delete>
+
+    <delete id="removeAllAttachment">
+        delete from attachments where aid = #{arg0}
+    </delete>
+
+    <resultMap id="articleMap" type="cn.network_engineering.po.Article">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="releaseTime" column="releaseTime"/>
+        <collection property="attachments" javaType="ArrayList" ofType="String" column="id" select="getAttachment"/>
+    </resultMap>
+
+    <select id="getArticle" parameterType="int" resultMap="articleMap">
+        select * from study where id = #{value}
+    </select>
+
+    <select id="getDisplay" parameterType="int" resultType="cn.network_engineering.po.Article">
+        select * from study order by releaseTime desc limit #{value}
+    </select>
+
+    <select id="getAll" resultType="cn.network_engineering.po.Article">
+        select * from study order by releaseTime desc
+    </select>
+
+    <select id="search" parameterType="String" resultType="cn.network_engineering.po.Article">
+        select * from study where title like '%${value}%' order by releaseTime desc
+    </select>
+
+</mapper>

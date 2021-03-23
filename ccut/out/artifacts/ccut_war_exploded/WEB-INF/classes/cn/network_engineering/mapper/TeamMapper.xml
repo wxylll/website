@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.network_engineering.mapper.TeamMapper">
+
+    <insert id="add" parameterType="cn.network_engineering.po.Staff">
+        insert into team values(null,#{name},#{photo})
+    </insert>
+
+    <update id="update" parameterType="cn.network_engineering.po.Staff">
+        update team set name=#{name}, photo=#{photo} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from team where id = #{value}
+    </delete>
+
+    <select id="getTeamMember" parameterType="int" resultType="cn.network_engineering.po.Staff">
+        select * from team where id = #{value}
+    </select>
+
+    <select id="getAll" resultType="cn.network_engineering.po.Staff">
+        select * from team
+    </select>
+
+</mapper>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="network">
+    <output-path>$PROJECT_DIR$/out/artifacts/network</output-path>
+    <root id="archive" name="network.war">
+      <element id="artifact" artifact-name="ccut:war exploded" />
+    </root>
+  </artifact>
+</component>
